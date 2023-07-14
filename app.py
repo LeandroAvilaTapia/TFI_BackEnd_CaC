@@ -140,6 +140,20 @@ update_producto(id):
     # Retorna un JSON con el producto actualizado
 
 '''
+@app.route("/productos/<string:texto>", methods=["GET"])
+def busqueda_producto(texto):
+    """
+    Endpoint para buscar productos en la base de datos.
+
+    Retorna un JSON con la información de los productos correspondientes.
+    """
+    
+    #texto_min = texto.lower()  # Convertir la cadena de búsqueda a minúscula
+    #all_productos = Producto.query.all()  # Pruebo que la ruta funcione.
+    productosfiltrados = Producto.query.filter(Producto.nombre.ilike(f'%{texto}%')).all()  # Filtra los productos
+    result = productos_schema.dump(productosfiltrados)  # Serializa los registros en formato JSON
+    return jsonify(result)  # Retorna el JSON de todos los registros de la tabla
+
 @app.route("/productos/<id>", methods=["GET"])
 def get_producto(id):
     """
